@@ -10,13 +10,13 @@ vcenter_array = {
 }
 
 # recurse all folders
-def recurse_for_object(folder)
+def recurse_for_vms(folder)
   folder.childEntity.each do |x|
     if x.class == RbVmomi::VIM::VirtualMachine
       # line that will print machine information - can be changed as needed
       puts "#{x.name} - #{x.guest.guestId} - #{x.guest.ipAddress} - #{x.guest.guestState} - #{x.guest.guestFamily}"
     elsif x.class == RbVmomi::VIM::Folder
-      recurse_for_object(x)
+      recurse_for_vms(x)
     end
   end
 end
@@ -27,6 +27,6 @@ vcenter_array.each do |key,value|
     puts "========datacetner is: #{datacenter}================"
     vim = RbVmomi::VIM.connect :host => key.to_s, :user => user, :password => password, :insecure => true
     dc = vim.serviceInstance.find_datacenter(datacenter)
-    recurse_for_object(dc.vmFolder)
+    recurse_for_vms(dc.vmFolder)
   end
 end
